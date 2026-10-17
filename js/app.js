@@ -944,22 +944,24 @@ function showGlassToast(message) {
     toast = document.createElement("div");
     toast.id = "glassToast";
     toast.style.position = "fixed";
-    toast.style.bottom = "28px";
-    toast.style.right = "28px";
-    toast.style.background = "rgba(16, 185, 129, 0.9)";
-    toast.style.backdropFilter = "blur(14px)";
-    toast.style.webkitBackdropFilter = "blur(14px)";
-    toast.style.border = "1px solid rgba(255, 255, 255, 0.35)";
-    toast.style.boxShadow = "0 10px 30px rgba(0,0,0,0.3)";
-    toast.style.color = "#ffffff";
-    toast.style.padding = "12px 22px";
-    toast.style.borderRadius = "9999px";
-    toast.style.fontSize = "0.9rem";
+    toast.style.bottom = "24px";
+    toast.style.right = "24px";
+    toast.style.background = "rgba(15, 23, 42, 0.92)";
+    toast.style.backdropFilter = "blur(16px)";
+    toast.style.webkitBackdropFilter = "blur(16px)";
+    toast.style.border = "1px solid rgba(255, 255, 255, 0.14)";
+    toast.style.boxShadow = "0 8px 24px rgba(0, 0, 0, 0.5)";
+    toast.style.color = "#f8fafc";
+    toast.style.padding = "10px 18px";
+    toast.style.borderRadius = "8px";
+    toast.style.fontFamily = "'DM Sans', sans-serif";
+    toast.style.fontSize = "0.85rem";
     toast.style.fontWeight = "600";
+    toast.style.letterSpacing = "0.01em";
     toast.style.zIndex = "9999";
-    toast.style.transition = "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)";
+    toast.style.transition = "all 0.22s cubic-bezier(0.16, 1, 0.3, 1)";
     toast.style.opacity = "0";
-    toast.style.transform = "translateY(20px)";
+    toast.style.transform = "translateY(12px)";
     document.body.appendChild(toast);
   }
 
