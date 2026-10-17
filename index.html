@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Weather Planner - Lập kế hoạch du lịch thông minh kết hợp dự báo thời tiết với phong cách thiết kế Glassmorphism hiện đại">
+  <title>Weather Planner - Giao Diện Kính Mờ Glassmorphism</title>
+
+  <!-- External Stylesheet (Quy tắc 6 & 7) -->
+  <link rel="stylesheet" href="css/style.css">
+
+  <!-- External JavaScript (Quy tắc 6 & 7) -->
+  <script src="js/app.js" defer></script>
+</head>
+<body>
+
+  <!-- Ambient Glow Elements for Glassmorphic Depth -->
+  <div class="ambient-glow glow-1"></div>
+  <div class="ambient-glow glow-2"></div>
+
+  <!-- Main Application Wrapper -->
+  <div class="app-wrapper">
+
+    <!-- Top Navigation / App Header -->
+    <header class="app-header glass-card">
+      <div class="brand-container">
+        <div class="brand-icon">
+          <!-- Weather Compass SVG -->
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
+            <circle cx="12" cy="12" r="5"/>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <h1>Weather <span>Planner</span></h1>
+          <p>Lập kế hoạch du lịch thông minh & Theo dõi thời tiết</p>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <!-- City Quick Switcher -->
+        <div class="city-select-wrapper" title="Chọn địa điểm thời tiết">
+          <select id="headerCitySelect" class="city-select" aria-label="Chọn điểm đến">
+            <option value="bien-hoa">📍 Biên Hòa</option>
+            <option value="da-lat" selected>📍 Đà Lạt</option>
+            <option value="vung-tau">📍 Vũng Tàu</option>
+          </select>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="6 9 12 15 18 9"></polyline>
+          </svg>
+        </div>
+
+        <div class="live-badge">
+          <span class="live-dot"></span>
+          <span>Dữ liệu thực</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Two-Column Layout (CSS Grid 1fr : 1.6fr) -->
+    <main class="main-layout">
+
+      <!-- ==========================================
+           CỘT TRÁI: THỜI TIẾT (Weather Widget)
+           ========================================== -->
+      <aside class="weather-column">
+        <!-- Weather Hero Card -->
+        <div class="glass-card weather-hero-card">
+          <!-- City Selector for 3 Cities (Biên Hòa, Đà Lạt, Vũng Tàu) -->
+          <div class="city-selector-box">
+            <label for="cityWeatherSelect" class="city-selector-label">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="pin-icon">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                <circle cx="12" cy="10" r="3"></circle>
+              </svg>
+              <span>Chọn thành phố theo dõi:</span>
+            </label>
+            <div class="city-select-dropdown-wrap">
+              <select id="cityWeatherSelect" class="glass-select-city" aria-label="Chọn thành phố">
+                <option value="bien-hoa">📍 Biên Hòa (Đồng Nai)</option>
+                <option value="da-lat" selected>📍 Đà Lạt (Lâm Đồng)</option>
+                <option value="vung-tau">📍 Vũng Tàu (Bà Rịa - Vũng Tàu)</option>
+              </select>
+              <svg class="select-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </div>
+          </div>
+
+          <!-- Dynamic Weather Content Area (with Smooth Transition) -->
+          <div id="weatherDynamicContent" class="weather-content-transition">
+            <!-- Location & Condition -->
+            <div class="weather-location-meta">
+              <div>
+                <h2 id="weatherCityName" class="city-title">Đà Lạt, Lâm Đồng</h2>
+                <p id="weatherCurrentDate" class="weather-date-badge">Đang tải ngày...</p>
+              </div>
+              <div id="weatherConditionPill" class="condition-pill rainy">
+                <span>●</span>
+                <span>Mưa phùn & Se lạnh</span>
+              </div>
+            </div>
+
+            <!-- Hero Temperature & Dynamic Weather Illustration -->
+            <div class="temp-display">
+            <div class="temp-number">
+              <span id="tempNumber">29</span>
+              <span class="temp-unit">°C</span>
+            </div>
+            <div id="weatherIllustrationWrap">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+
+          <!-- Key Weather Metrics (Nhiệt độ, Độ ẩm, Gió, UV) -->
+          <div class="metrics-grid">
+            <div class="metric-item">
+              <div class="metric-icon" style="background: rgba(56, 189, 248, 0.2); color: #38bdf8;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path>
+                </svg>
+              </div>
+              <div class="metric-meta">
+                <span class="metric-label">Độ ẩm</span>
+                <span id="humidityVal" class="metric-val">72%</span>
+              </div>
+            </div>
+
+            <div class="metric-item">
+              <div class="metric-icon" style="background: rgba(52, 211, 153, 0.2); color: #34d399;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M9.59 4.59A2 2 0 1 1 11 8H2m10.59 11.41A2 2 0 1 0 14 16H2m15.73-8.27A2.5 2.5 0 1 1 19.5 12H2"></path>
+                </svg>
+              </div>
+              <div class="metric-meta">
+                <span class="metric-label">Sức gió</span>
+                <span id="windVal" class="metric-val">16 km/h</span>
+              </div>
+            </div>
+
+            <div class="metric-item">
+              <div class="metric-icon" style="background: rgba(251, 191, 36, 0.2); color: #fbbf24;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="5"></circle>
+                  <line x1="12" y1="1" x2="12" y2="3"></line>
+                  <line x1="12" y1="21" x2="12" y2="23"></line>
+                </svg>
+              </div>
+              <div class="metric-meta">
+                <span class="metric-label">Chỉ số UV</span>
+                <span id="uvVal" class="metric-val">7 (Cao)</span>
+              </div>
+            </div>
+
+            <div class="metric-item">
+              <div class="metric-icon" style="background: rgba(244, 63, 94, 0.2); color: #f43f5e;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"></path>
+                </svg>
+              </div>
+              <div class="metric-meta">
+                <span class="metric-label">Cảm nhận như</span>
+                <span id="feelsLikeVal" class="metric-val">32°C</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Forecast 3 Days Ahead -->
+          <div class="forecast-section">
+            <span class="forecast-title">Dự báo 3 ngày tới</span>
+            <div id="forecastRow" class="forecast-row">
+              <!-- Populated via JS -->
+            </div>
+          </div>
+          </div> <!-- End of #weatherDynamicContent -->
+        </div> <!-- End of .weather-hero-card -->
+
+        <!-- Outfit Advisor Card (Gợi ý trang phục phù hợp theo nhiệt độ) -->
+        <div id="outfitAdvisorCard" class="glass-card outfit-card outfit-moderate">
+          <div class="outfit-icon-wrap" id="outfitIconWrap">
+            <span class="outfit-emoji">👕</span>
+          </div>
+          <div class="outfit-content">
+            <div class="outfit-header-meta">
+              <h4>Gợi ý trang phục</h4>
+              <span id="outfitTempBadge" class="outfit-badge">Mát mẻ</span>
+            </div>
+            <p id="outfitSuggestionText" class="outfit-text">
+              Đang phân tích nhiệt độ để gợi ý trang phục...
+            </p>
+          </div>
+        </div>
+
+        <!-- Weather Insights / Planning Advice Card -->
+        <div class="glass-card advice-card">
+          <div class="advice-icon-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            </svg>
+          </div>
+          <div class="advice-text">
+            <h4>Gợi ý hành trình hôm nay</h4>
+            <p id="weatherAdviceText">Đang tối ưu dữ liệu thời tiết cho bạn...</p>
+          </div>
+        </div>
+
+        <!-- Departure Countdown Card (Đồng hồ đếm ngược ngày khởi hành - setInterval) -->
+        <div id="departureCountdownCard" class="glass-card countdown-card">
+          <div class="countdown-header">
+            <div class="countdown-title-wrap">
+              <div class="countdown-icon-box">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+              </div>
+              <h4>Đếm Ngược Ngày Đi</h4>
+            </div>
+            <span id="countdownStatusBadge" class="countdown-badge">Chưa chọn ngày</span>
+          </div>
+
+          <!-- Date Picker -->
+          <div class="departure-picker-wrap">
+            <label for="departureDateInput" class="picker-label">
+              <span>📅 Chọn ngày khởi hành:</span>
+            </label>
+            <input 
+              type="date" 
+              id="departureDateInput" 
+              class="glass-date-input" 
+              aria-label="Chọn ngày khởi hành"
+            >
+          </div>
+
+          <!-- 4 Time Boxes (Ngày, Giờ, Phút, Giây) -->
+          <div id="countdownBoxesWrap" class="countdown-boxes-grid">
+            <div class="countdown-box">
+              <span id="countDays" class="count-num">--</span>
+              <span class="count-unit">Ngày</span>
+            </div>
+            <div class="countdown-box">
+              <span id="countHours" class="count-num">--</span>
+              <span class="count-unit">Giờ</span>
+            </div>
+            <div class="countdown-box">
+              <span id="countMinutes" class="count-num">--</span>
+              <span class="count-unit">Phút</span>
+            </div>
+            <div class="countdown-box">
+              <span id="countSeconds" class="count-num">--</span>
+              <span class="count-unit">Giây</span>
+            </div>
+          </div>
+
+          <!-- Countdown Text Summary -->
+          <div class="countdown-summary-box">
+            <p id="countdownTextSummary" class="countdown-summary-text">
+              Vui lòng chọn ngày khởi hành để bắt đầu đếm ngược!
+            </p>
+          </div>
+        </div>
+      </aside>
+
+      <!-- ==========================================
+           CỘT PHẢI: KẾ HOẠCH ĐỊA ĐIỂM DU LỊCH (Planner)
+           Bao gồm: Tìm kiếm, Lọc, Sắp xếp tiêu đề, Phân trang
+           ========================================== -->
+      <section class="destinations-column glass-card">
+        <!-- Planner Header -->
+        <div class="planner-header">
+          <div class="planner-title-group">
+            <h2>
+              <span>Lịch Trình Địa Điểm Du Lịch</span>
+              <span id="totalCountBadge" class="count-badge">0 địa điểm</span>
+            </h2>
+            <p>Lên danh sách lịch trình chuyến đi, theo dõi thời gian và trạng thái hoàn thành</p>
+          </div>
+        </div>
+
+        <!-- Itinerary Input Form (Nhập 'Tên địa điểm' và 'Thời gian') -->
+        <form id="itineraryForm" class="itinerary-form-card" autocomplete="off">
+          <div class="form-header-bar">
+            <span class="form-badge">➕ THÊM LỊCH TRÌNH MỚI</span>
+            <span class="form-subtext">Nhập tên địa điểm & thời gian ghé thăm</span>
+          </div>
+          <div class="form-inputs-row">
+            <div class="input-with-icon place-input-wrap">
+              <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                <circle cx="12" cy="10" r="3"></circle>
+              </svg>
+              <input 
+                type="text" 
+                id="itineraryPlaceInput" 
+                class="glass-form-input" 
+                placeholder="Tên địa điểm (VD: Ghé thăm Thác Giang Điền)" 
+                required
+              >
+            </div>
+
+            <div class="input-with-icon time-input-wrap">
+              <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 6 12 12 16 14"></polyline>
+              </svg>
+              <input 
+                type="text" 
+                id="itineraryTimeInput" 
+                class="glass-form-input" 
+                placeholder="Thời gian (VD: 9:00 AM)" 
+                required
+              >
+            </div>
+
+            <button type="submit" id="addItineraryBtn" class="btn-add-itinerary" title="Thêm vào danh sách lịch trình">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="btn-icon">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+              </svg>
+              <span>Thêm</span>
+            </button>
+          </div>
+        </form>
+
+        <!-- Control Toolbar: Search, Filter, Sort, PageSize (Tuân thủ Quy tắc 1) -->
+        <div class="toolbar-container">
+          <!-- 1. Search Box (Title search) -->
+          <div class="search-input-group">
+            <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input 
+              type="text" 
+              id="searchInput" 
+              class="glass-input" 
+              placeholder="Tìm kiếm địa điểm trong lịch trình..." 
+              aria-label="Tìm kiếm lịch trình"
+            >
+          </div>
+
+          <!-- 2. Status & Category Filter -->
+          <div class="control-group">
+            <select id="statusFilter" class="glass-select" aria-label="Bộ lọc trạng thái">
+              <option value="all">📋 Tất cả trạng thái</option>
+              <option value="pending">⏳ Chưa đến (Chờ đi)</option>
+              <option value="visited">✅ Đã đến (Hoàn thành)</option>
+            </select>
+            <svg class="select-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </div>
+
+          <!-- 3. Sort on Title (Quy tắc 1) -->
+          <div class="control-group">
+            <select id="titleSort" class="glass-select" aria-label="Sắp xếp theo tiêu đề">
+              <option value="asc">🔤 Tiêu đề: A → Z</option>
+              <option value="desc">🔤 Tiêu đề: Z → A</option>
+            </select>
+            <svg class="select-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </div>
+
+          <!-- 4. Page Size Options: 10, 20, 50, all (Quy tắc 1) -->
+          <div class="control-group">
+            <select id="pageSizeSelect" class="glass-select" aria-label="Số lượng mỗi trang">
+              <option value="10">📄 10 / trang</option>
+              <option value="20">📄 20 / trang</option>
+              <option value="50">📄 50 / trang</option>
+              <option value="all">📄 Tất cả (All)</option>
+            </select>
+            <svg class="select-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Destination Cards List -->
+        <div id="destinationsList" class="destinations-list">
+          <!-- Rendered dynamically by js/app.js -->
+        </div>
+
+        <!-- Pagination Bar (Quy tắc 1) -->
+        <footer id="paginationContainer" class="pagination-container">
+          <div id="paginationInfo" class="pagination-info">
+            Hiển thị 1 - 10 trên tổng số 25 địa điểm
+          </div>
+          <div id="paginationActions" class="pagination-actions">
+            <!-- Buttons dynamically generated -->
+          </div>
+        </footer>
+      </section>
+
+    </main>
+
+    <!-- App Footer -->
+    <footer class="app-footer">
+      Weather Planner &copy; 2026 &bull; Thiết kế Glassmorphism chuẩn UI/UX &bull; HTML5 &amp; CSS3 &bull; Tách biệt External CSS / JS
+    </footer>
+
+  </div>
+
+</body>
+</html>

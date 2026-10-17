@@ -1,0 +1,1593 @@
+/* ===================================================================
+   WEATHER PLANNER - GLASSMORPHISM UI/UX DESIGN SYSTEM
+   Standard HTML5 / CSS3 / Vanilla JS Implementation
+   =================================================================== */
+
+:root {
+  /* Color Palette - Tropical Forest & Glass Reflections */
+  --bg-gradient: linear-gradient(135deg, rgba(7, 26, 20, 0.82) 0%, rgba(20, 52, 43, 0.75) 50%, rgba(13, 38, 29, 0.85) 100%);
+  --glass-bg: rgba(255, 255, 255, 0.12);
+  --glass-bg-hover: rgba(255, 255, 255, 0.18);
+  --glass-bg-active: rgba(255, 255, 255, 0.24);
+  --glass-card-inner: rgba(255, 255, 255, 0.08);
+  --glass-border: rgba(255, 255, 255, 0.22);
+  --glass-border-highlight: rgba(255, 255, 255, 0.45);
+  --glass-shadow: 0 16px 36px 0 rgba(0, 0, 0, 0.32);
+  --glass-shadow-sm: 0 8px 20px 0 rgba(0, 0, 0, 0.22);
+  --glass-blur: blur(20px) saturate(160%);
+
+  /* Typography Colors */
+  --text-primary: #ffffff;
+  --text-secondary: rgba(255, 255, 255, 0.78);
+  --text-muted: rgba(255, 255, 255, 0.55);
+
+  /* Accent Colors */
+  --accent-emerald: #10b981;
+  --accent-cyan: #06b6d4;
+  --accent-amber: #f59e0b;
+  --accent-rose: #f43f5e;
+  --accent-blue: #38bdf8;
+  --glow-emerald: 0 0 20px rgba(16, 185, 129, 0.4);
+
+  /* Dimensions & Radius */
+  --radius-xl: 28px;
+  --radius-lg: 18px;
+  --radius-md: 12px;
+  --radius-sm: 8px;
+  --radius-pill: 9999px;
+  
+  --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Base Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  color: var(--text-primary);
+  min-height: 100vh;
+  position: relative;
+  background-color: #0b1d16;
+  background-image: url('../images/nature-bg.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  overflow-x: hidden;
+  padding: 24px;
+}
+
+/* Background Ambient Lighting & Texture Overlay */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--bg-gradient);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Glowing Ambient Blobs for Depth */
+.ambient-glow {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(90px);
+  opacity: 0.35;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.glow-1 {
+  width: 450px;
+  height: 450px;
+  background: radial-gradient(circle, #059669 0%, transparent 70%);
+  top: -100px;
+  left: -100px;
+}
+
+.glow-2 {
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, #0284c7 0%, transparent 70%);
+  bottom: -120px;
+  right: -100px;
+}
+
+/* App Wrapper */
+.app-wrapper {
+  position: relative;
+  z-index: 1;
+  max-width: 1440px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  min-height: calc(100vh - 48px);
+}
+
+/* Glassmorphism Shared Card Style */
+.glass-card {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  border-radius: var(--radius-xl);
+  transition: all var(--transition-normal);
+}
+
+/* ===================================================================
+   HEADER
+   =================================================================== */
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 28px;
+  border-radius: var(--radius-xl);
+}
+
+.brand-container {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.brand-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-md);
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.4), rgba(6, 182, 212, 0.4));
+  border: 1px solid var(--glass-border-highlight);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--glow-emerald);
+}
+
+.brand-icon svg {
+  width: 24px;
+  height: 24px;
+  fill: #ffffff;
+}
+
+.brand-text h1 {
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.brand-text h1 span {
+  background: linear-gradient(90deg, #34d399, #38bdf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.brand-text p {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.city-select-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.city-select {
+  appearance: none;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-pill);
+  padding: 8px 36px 8px 16px;
+  font-size: 0.88rem;
+  color: #fff;
+  cursor: pointer;
+  outline: none;
+  font-weight: 600;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: all var(--transition-fast);
+}
+
+.city-select option {
+  background: #112a20;
+  color: #fff;
+}
+
+.city-select:hover, .city-select:focus {
+  border-color: var(--accent-emerald);
+  background: rgba(255, 255, 255, 0.22);
+}
+
+.city-select-wrapper .chevron {
+  position: absolute;
+  right: 14px;
+  pointer-events: none;
+  width: 14px;
+  height: 14px;
+  stroke: var(--text-secondary);
+}
+
+.live-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(16, 185, 129, 0.2);
+  border: 1px solid rgba(16, 185, 129, 0.4);
+  color: #34d399;
+  padding: 6px 14px;
+  border-radius: var(--radius-pill);
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.live-dot {
+  width: 7px;
+  height: 7px;
+  background-color: #34d399;
+  border-radius: 50%;
+  box-shadow: 0 0 10px #34d399;
+  animation: pulseDot 2s infinite;
+}
+
+@keyframes pulseDot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.85); }
+}
+
+/* ===================================================================
+   MAIN LAYOUT (2 COLUMNS CSS GRID: 1fr : 1.6fr)
+   =================================================================== */
+.main-layout {
+  display: grid;
+  grid-template-columns: 1fr 1.6fr;
+  gap: 24px;
+  flex: 1;
+  align-items: start;
+}
+
+/* ===================================================================
+   LEFT COLUMN: WEATHER WIDGET & PLANNING INSIGHTS
+   =================================================================== */
+.weather-column {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.weather-hero-card {
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Subtle corner gradient shine */
+.weather-hero-card::after {
+  content: "";
+  position: absolute;
+  top: -50px;
+  right: -50px;
+  width: 180px;
+  height: 180px;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* City Selector Box (Biên Hòa, Đà Lạt, Vũng Tàu) */
+.city-selector-box {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: rgba(0, 0, 0, 0.24);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: var(--radius-lg);
+  padding: 12px 16px;
+  margin-bottom: 6px;
+}
+
+.city-selector-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #34d399;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+}
+
+.city-selector-label .pin-icon {
+  width: 15px;
+  height: 15px;
+  stroke: #34d399;
+}
+
+.city-select-dropdown-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.glass-select-city {
+  width: 100%;
+  appearance: none;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  padding: 10px 38px 10px 14px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #ffffff;
+  outline: none;
+  cursor: pointer;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: all var(--transition-fast);
+}
+
+.glass-select-city option {
+  background: #0f271f;
+  color: #ffffff;
+  font-weight: 500;
+}
+
+.glass-select-city:focus, .glass-select-city:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: var(--accent-emerald);
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.25);
+}
+
+.city-select-dropdown-wrap .select-chevron {
+  position: absolute;
+  right: 14px;
+  width: 16px;
+  height: 16px;
+  stroke: var(--text-secondary);
+  pointer-events: none;
+}
+
+/* Smooth Fade & Glass Glow Transition for Weather Updates */
+.weather-content-transition {
+  transition: opacity 0.28s ease, transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.weather-content-transition.weather-fading {
+  opacity: 0.1;
+  transform: translateY(6px) scale(0.98);
+}
+
+.weather-location-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.city-title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+.weather-date-badge {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  margin-top: 4px;
+}
+
+.condition-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  border-radius: var(--radius-pill);
+  font-size: 0.85rem;
+  font-weight: 600;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.condition-pill.sunny {
+  background: rgba(245, 158, 11, 0.25);
+  border: 1px solid rgba(245, 158, 11, 0.45);
+  color: #fde68a;
+}
+
+.condition-pill.rainy {
+  background: rgba(56, 189, 248, 0.22);
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  color: #bae6fd;
+}
+
+.condition-pill.cloudy {
+  background: rgba(148, 163, 184, 0.22);
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  color: #f1f5f9;
+}
+
+/* Hero Temperature */
+.temp-display {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 6px 0;
+}
+
+.temp-number {
+  font-size: 4.8rem;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -2px;
+  background: linear-gradient(180deg, #ffffff 40%, rgba(255, 255, 255, 0.7) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: flex;
+  align-items: flex-start;
+}
+
+.temp-unit {
+  font-size: 2.2rem;
+  font-weight: 400;
+  margin-top: 4px;
+  -webkit-text-fill-color: var(--accent-emerald);
+}
+
+.weather-illustration {
+  width: 96px;
+  height: 96px;
+  filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.35));
+  animation: floatWeather 4s ease-in-out infinite;
+}
+
+@keyframes floatWeather {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-8px) rotate(2deg); }
+}
+
+/* Key Metrics Grid (Humidity, Wind, UV, Feels Like) */
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.metric-item {
+  background: var(--glass-card-inner);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: all var(--transition-fast);
+}
+
+.metric-item:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.25);
+  transform: translateY(-2px);
+}
+
+.metric-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.metric-icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.metric-meta {
+  display: flex;
+  flex-direction: column;
+}
+
+.metric-label {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.metric-val {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin-top: 2px;
+}
+
+/* Mini 3-day forecast card */
+.forecast-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
+  padding-top: 16px;
+}
+
+.forecast-title {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--text-muted);
+}
+
+.forecast-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.forecast-col {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-md);
+  padding: 10px 8px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  transition: all var(--transition-fast);
+}
+
+.forecast-col:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.forecast-day {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+}
+
+.forecast-icon {
+  width: 28px;
+  height: 28px;
+}
+
+.forecast-temp {
+  font-size: 0.92rem;
+  font-weight: 700;
+}
+
+/* Outfit Advisor Card (Gợi ý trang phục theo nhiệt độ) */
+.outfit-card {
+  padding: 20px 24px;
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  border-left: 4px solid var(--accent-emerald);
+  transition: all var(--transition-normal);
+}
+
+.outfit-icon-wrap {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  flex-shrink: 0;
+  transition: all var(--transition-fast);
+}
+
+.outfit-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.outfit-header-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.outfit-header-meta h4 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  transition: color var(--transition-fast);
+}
+
+.outfit-badge {
+  font-size: 0.74rem;
+  padding: 3px 10px;
+  border-radius: var(--radius-pill);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.outfit-text {
+  font-size: 0.88rem;
+  line-height: 1.48;
+  color: var(--text-secondary);
+}
+
+/* Outfit Temperature Themes */
+/* 1. Lạnh (< 20°C): Xanh dương băng giá */
+.outfit-card.outfit-cold {
+  border-left-color: var(--accent-blue);
+}
+.outfit-card.outfit-cold .outfit-icon-wrap {
+  background: rgba(56, 189, 248, 0.22);
+  border: 1px solid rgba(56, 189, 248, 0.45);
+}
+.outfit-card.outfit-cold .outfit-badge {
+  background: rgba(56, 189, 248, 0.2);
+  color: #bae6fd;
+  border: 1px solid rgba(56, 189, 248, 0.4);
+}
+.outfit-card.outfit-cold .outfit-header-meta h4 {
+  color: #38bdf8;
+}
+
+/* 2. Mát mẻ (20°C - 30°C): Xanh ngọc lục bảo */
+.outfit-card.outfit-moderate {
+  border-left-color: var(--accent-emerald);
+}
+.outfit-card.outfit-moderate .outfit-icon-wrap {
+  background: rgba(16, 185, 129, 0.22);
+  border: 1px solid rgba(16, 185, 129, 0.45);
+}
+.outfit-card.outfit-moderate .outfit-badge {
+  background: rgba(16, 185, 129, 0.2);
+  color: #6ee7b7;
+  border: 1px solid rgba(16, 185, 129, 0.4);
+}
+.outfit-card.outfit-moderate .outfit-header-meta h4 {
+  color: #34d399;
+}
+
+/* 3. Nắng nóng (> 30°C): Hổ phách rực rỡ */
+.outfit-card.outfit-hot {
+  border-left-color: var(--accent-amber);
+}
+.outfit-card.outfit-hot .outfit-icon-wrap {
+  background: rgba(245, 158, 11, 0.22);
+  border: 1px solid rgba(245, 158, 11, 0.45);
+}
+.outfit-card.outfit-hot .outfit-badge {
+  background: rgba(245, 158, 11, 0.2);
+  color: #fde68a;
+  border: 1px solid rgba(245, 158, 11, 0.4);
+}
+.outfit-card.outfit-hot .outfit-header-meta h4 {
+  color: #fbbf24;
+}
+
+/* Weather Advice Card */
+.advice-card {
+  padding: 20px 24px;
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  border-left: 4px solid var(--accent-emerald);
+}
+
+.advice-icon-wrap {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  background: rgba(16, 185, 129, 0.25);
+  border: 1px solid rgba(16, 185, 129, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.advice-icon-wrap svg {
+  width: 22px;
+  height: 22px;
+  fill: #34d399;
+}
+
+.advice-text h4 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin-bottom: 4px;
+  color: #34d399;
+}
+
+.advice-text p {
+  font-size: 0.84rem;
+  line-height: 1.45;
+  color: var(--text-secondary);
+}
+
+/* ===================================================================
+   DEPARTURE COUNTDOWN CARD (Đồng hồ đếm ngược ngày khởi hành)
+   =================================================================== */
+.countdown-card {
+  padding: 22px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  border-left: 4px solid var(--accent-cyan);
+}
+
+.countdown-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.countdown-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.countdown-icon-box {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  background: rgba(6, 182, 212, 0.22);
+  border: 1px solid rgba(6, 182, 212, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #38bdf8;
+}
+
+.countdown-icon-box svg {
+  width: 18px;
+  height: 18px;
+}
+
+.countdown-title-wrap h4 {
+  font-size: 0.96rem;
+  font-weight: 700;
+  color: #38bdf8;
+}
+
+.countdown-badge {
+  font-size: 0.74rem;
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+  background: rgba(6, 182, 212, 0.18);
+  border: 1px solid rgba(6, 182, 212, 0.35);
+  color: #7dd3fc;
+  font-weight: 600;
+}
+
+.departure-picker-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-md);
+  padding: 10px 14px;
+}
+
+.picker-label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.glass-date-input {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: #ffffff;
+  outline: none;
+  cursor: pointer;
+  color-scheme: dark;
+  transition: all var(--transition-fast);
+}
+
+.glass-date-input:focus, .glass-date-input:hover {
+  background: rgba(255, 255, 255, 0.18);
+  border-color: var(--accent-cyan);
+  box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.25);
+}
+
+.countdown-boxes-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+
+.countdown-box {
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: var(--radius-md);
+  padding: 10px 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1);
+  transition: all var(--transition-fast);
+}
+
+.countdown-box:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(6, 182, 212, 0.4);
+  transform: translateY(-2px);
+}
+
+.count-num {
+  font-size: 1.55rem;
+  font-weight: 800;
+  color: #38bdf8;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.1;
+  text-shadow: 0 0 12px rgba(56, 189, 248, 0.4);
+}
+
+.count-unit {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  letter-spacing: 0.6px;
+  font-weight: 600;
+}
+
+.countdown-summary-box {
+  background: rgba(6, 182, 212, 0.12);
+  border: 1px solid rgba(6, 182, 212, 0.25);
+  border-radius: var(--radius-md);
+  padding: 10px 14px;
+  text-align: center;
+}
+
+.countdown-summary-text {
+  font-size: 0.86rem;
+  line-height: 1.45;
+  color: #e0f2fe;
+}
+
+.countdown-summary-text strong {
+  color: #38bdf8;
+  font-weight: 700;
+}
+
+/* ===================================================================
+   RIGHT COLUMN: DESTINATION PLANNER (FULL LIST CONTROLS)
+   =================================================================== */
+.destinations-column {
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-height: 600px;
+}
+
+.planner-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.planner-title-group h2 {
+  font-size: 1.45rem;
+  font-weight: 700;
+  letter-spacing: -0.4px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.planner-title-group p {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  margin-top: 4px;
+}
+
+.count-badge {
+  font-size: 0.78rem;
+  background: rgba(255, 255, 255, 0.16);
+  border: 1px solid var(--glass-border);
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+  color: #fff;
+}
+
+/* ===================================================================
+   ITINERARY FORM & ACTIONS
+   =================================================================== */
+.itinerary-form-card {
+  background: rgba(0, 0, 0, 0.28);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: var(--radius-lg);
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.15);
+}
+
+.form-header-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.form-badge {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #34d399;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+}
+
+.form-subtext {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.form-inputs-row {
+  display: grid;
+  grid-template-columns: 2fr 1.3fr auto;
+  gap: 12px;
+  align-items: center;
+}
+
+.input-with-icon {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-with-icon .input-icon {
+  position: absolute;
+  left: 14px;
+  width: 17px;
+  height: 17px;
+  stroke: var(--text-muted);
+  pointer-events: none;
+}
+
+.glass-form-input {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  padding: 11px 14px 11px 40px;
+  font-size: 0.88rem;
+  color: #ffffff;
+  outline: none;
+  transition: all var(--transition-fast);
+}
+
+.glass-form-input::placeholder {
+  color: var(--text-muted);
+}
+
+.glass-form-input:focus {
+  background: rgba(0, 0, 0, 0.4);
+  border-color: var(--accent-emerald);
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.25);
+}
+
+.btn-add-itinerary {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  color: #ffffff;
+  padding: 10px 22px;
+  border-radius: var(--radius-md);
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all var(--transition-fast);
+  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.4);
+  white-space: nowrap;
+}
+
+.btn-add-itinerary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.6);
+  background: linear-gradient(135deg, #34d399 0%, #10b981 100%);
+}
+
+.btn-add-itinerary:active {
+  transform: translateY(0);
+}
+
+.btn-icon {
+  width: 16px;
+  height: 16px;
+}
+
+/* Card Action Buttons (Đã đến & Xóa) */
+.itinerary-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-status-toggle {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  color: #ffffff;
+  padding: 7px 14px;
+  border-radius: var(--radius-pill);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all var(--transition-fast);
+}
+
+.btn-status-toggle:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: var(--glass-border-highlight);
+}
+
+.btn-status-toggle.is-visited {
+  background: rgba(16, 185, 129, 0.35);
+  border-color: rgba(52, 211, 153, 0.65);
+  color: #a7f3d0;
+}
+
+.btn-delete-item {
+  background: rgba(244, 63, 94, 0.14);
+  border: 1px solid rgba(244, 63, 94, 0.32);
+  color: #fca5a5;
+  padding: 7px 12px;
+  border-radius: var(--radius-pill);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all var(--transition-fast);
+}
+
+.btn-delete-item:hover {
+  background: rgba(244, 63, 94, 0.35);
+  border-color: #f43f5e;
+  color: #ffffff;
+  transform: scale(1.04);
+}
+
+.time-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(56, 189, 248, 0.18);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  color: #bae6fd;
+  padding: 3px 9px;
+  border-radius: var(--radius-pill);
+  font-size: 0.74rem;
+  font-weight: 600;
+}
+
+/* Visited Card State */
+.dest-card.item-visited {
+  background: rgba(16, 185, 129, 0.18);
+  border-color: rgba(52, 211, 153, 0.55);
+  box-shadow: 0 4px 20px rgba(16, 185, 129, 0.25);
+}
+
+.dest-card.item-visited .dest-title {
+  color: #a7f3d0;
+  text-decoration: line-through rgba(52, 211, 153, 0.5);
+}
+
+.dest-card.item-visited .dest-avatar {
+  background: rgba(16, 185, 129, 0.3);
+  border-color: rgba(52, 211, 153, 0.6);
+}
+
+/* Keyframe Animations for Adding New Item (Slide-down & Glass Glow Pulse) */
+@keyframes slideDownEnter {
+  0% {
+    opacity: 0;
+    transform: translateY(-26px) scale(0.95);
+  }
+  70% {
+    opacity: 0.9;
+    transform: translateY(2px) scale(1.01);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes glassGlowPulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(52, 211, 153, 0.8);
+    border-color: rgba(52, 211, 153, 0.9);
+  }
+  50% {
+    box-shadow: 0 0 28px 6px rgba(52, 211, 153, 0.55);
+    border-color: #34d399;
+  }
+  100% {
+    box-shadow: var(--glass-shadow-sm);
+    border-color: rgba(255, 255, 255, 0.16);
+  }
+}
+
+@keyframes itemSlideExit {
+  0% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+    max-height: 120px;
+    margin-bottom: 14px;
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(45px) scale(0.9);
+    max-height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-bottom: 0;
+  }
+}
+
+/* Transition Classes */
+.new-item-entering {
+  animation: slideDownEnter 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards, glassGlowPulse 1.5s ease-out forwards;
+}
+
+.item-leaving {
+  animation: itemSlideExit 0.32s ease-in forwards;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* Toolbar Control Bar (Search, Filter, Sort, PageSize) */
+.toolbar-container {
+  display: grid;
+  grid-template-columns: 1.8fr 1.2fr 1.2fr 1fr;
+  gap: 12px;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: var(--radius-lg);
+  padding: 14px;
+}
+
+/* Search Input */
+.search-input-group {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-icon {
+  position: absolute;
+  left: 14px;
+  width: 18px;
+  height: 18px;
+  stroke: var(--text-muted);
+  pointer-events: none;
+}
+
+.glass-input {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  padding: 10px 14px 10px 42px;
+  font-size: 0.88rem;
+  color: #ffffff;
+  outline: none;
+  transition: all var(--transition-fast);
+}
+
+.glass-input::placeholder {
+  color: var(--text-muted);
+}
+
+.glass-input:focus {
+  background: rgba(0, 0, 0, 0.35);
+  border-color: var(--accent-emerald);
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.25);
+}
+
+/* Select Controls */
+.control-group {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.glass-select {
+  width: 100%;
+  appearance: none;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  padding: 10px 32px 10px 14px;
+  font-size: 0.86rem;
+  color: #ffffff;
+  outline: none;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.glass-select option {
+  background: #10261e;
+  color: #fff;
+}
+
+.glass-select:focus, .glass-select:hover {
+  border-color: var(--accent-emerald);
+  background: rgba(0, 0, 0, 0.35);
+}
+
+.control-group .select-arrow {
+  position: absolute;
+  right: 12px;
+  width: 14px;
+  height: 14px;
+  stroke: var(--text-secondary);
+  pointer-events: none;
+}
+
+/* Destination List Container */
+.destinations-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-height: 380px;
+}
+
+/* Individual Destination Card */
+.dest-card {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: var(--radius-lg);
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  transition: all var(--transition-fast);
+  cursor: pointer;
+}
+
+.dest-card:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: var(--glass-border-highlight);
+  transform: translateY(-2px);
+  box-shadow: var(--glass-shadow-sm);
+}
+
+.dest-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex: 1;
+}
+
+.dest-avatar {
+  width: 52px;
+  height: 52px;
+  border-radius: var(--radius-md);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0.05));
+  border: 1px solid var(--glass-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.dest-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.dest-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dest-desc {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+.dest-tags {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+  flex-wrap: wrap;
+}
+
+.tag-badge {
+  font-size: 0.72rem;
+  padding: 3px 8px;
+  border-radius: var(--radius-pill);
+  font-weight: 500;
+}
+
+.tag-nature {
+  background: rgba(16, 185, 129, 0.2);
+  color: #6ee7b7;
+  border: 1px solid rgba(16, 185, 129, 0.35);
+}
+
+.tag-beach {
+  background: rgba(14, 165, 233, 0.2);
+  color: #7dd3fc;
+  border: 1px solid rgba(14, 165, 233, 0.35);
+}
+
+.tag-culture {
+  background: rgba(245, 158, 11, 0.2);
+  color: #fcd34d;
+  border: 1px solid rgba(245, 158, 11, 0.35);
+}
+
+.tag-resort {
+  background: rgba(168, 85, 247, 0.2);
+  color: #d8b4fe;
+  border: 1px solid rgba(168, 85, 247, 0.35);
+}
+
+.dest-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.weather-badge-match {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px;
+  border-radius: var(--radius-pill);
+  font-size: 0.76rem;
+  font-weight: 600;
+}
+
+.weather-badge-match.sunny-match {
+  background: rgba(245, 158, 11, 0.2);
+  color: #fde68a;
+  border: 1px solid rgba(245, 158, 11, 0.35);
+}
+
+.weather-badge-match.rainy-match {
+  background: rgba(56, 189, 248, 0.2);
+  color: #bae6fd;
+  border: 1px solid rgba(56, 189, 248, 0.35);
+}
+
+.dest-rating {
+  font-size: 0.8rem;
+  color: #fbbf24;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Empty State */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 24px;
+  text-align: center;
+  gap: 12px;
+  color: var(--text-muted);
+}
+
+.empty-icon {
+  width: 56px;
+  height: 56px;
+  stroke: var(--text-muted);
+  opacity: 0.6;
+}
+
+/* ===================================================================
+   PAGINATION CONTROLS
+   =================================================================== */
+.pagination-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 14px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.pagination-info {
+  font-size: 0.84rem;
+  color: var(--text-secondary);
+}
+
+.pagination-info strong {
+  color: #ffffff;
+}
+
+.pagination-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.page-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: #ffffff;
+  min-width: 36px;
+  height: 36px;
+  padding: 0 10px;
+  border-radius: var(--radius-sm);
+  font-size: 0.84rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+}
+
+.page-btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.22);
+  border-color: var(--glass-border-highlight);
+}
+
+.page-btn.active {
+  background: var(--accent-emerald);
+  border-color: var(--accent-emerald);
+  color: #ffffff;
+  box-shadow: var(--glow-emerald);
+}
+
+.page-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+/* ===================================================================
+   FOOTER
+   =================================================================== */
+.app-footer {
+  text-align: center;
+  padding: 16px;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+/* ===================================================================
+   RESPONSIVE DESIGN (TABLET & MOBILE)
+   =================================================================== */
+@media (max-width: 1080px) {
+  .main-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .toolbar-container {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  body {
+    padding: 12px;
+  }
+
+  .app-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 16px;
+  }
+
+  .header-actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .weather-hero-card {
+    padding: 20px;
+  }
+
+  .temp-number {
+    font-size: 3.6rem;
+  }
+
+  .destinations-column {
+    padding: 18px;
+  }
+
+  .form-inputs-row {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .btn-add-itinerary {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .toolbar-container {
+    grid-template-columns: 1fr;
+  }
+
+  .dest-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .dest-right {
+    align-items: flex-start;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 10px;
+  }
+
+  .pagination-container {
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+  }
+
+  .pagination-actions {
+    justify-content: center;
+  }
+}
